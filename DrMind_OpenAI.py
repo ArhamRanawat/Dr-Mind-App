@@ -1441,10 +1441,12 @@ def from_json(value):
     except:
         return []
 
+# Initialize database tables (this runs when the app starts, regardless of how it's started)
+with app.app_context():
+    db.create_all()
+    print("🗄️  Database initialized successfully!")
+
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
-    
     print("🧠 Dr. Mind is starting up...")
     if GOOGLE_API_KEY:
         print("🤖 Real AI system ready with Google AI (Gemini 1.5 Pro)!")
