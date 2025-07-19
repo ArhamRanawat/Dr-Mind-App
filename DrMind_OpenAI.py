@@ -102,8 +102,12 @@ def get_cohere_ai_response(mood, journal, sentiment):
         
         prompt = f"Dr. Mind: I'm here to help. {context} Please provide a warm, empathetic response with practical suggestions."
         
+        # Get Cohere API key from environment
+        import os
+        COHERE_API_KEY = os.environ.get('COHERE_API_KEY', 'demo_key')
+        
         headers = {
-            "Authorization": "Bearer COHERE_API_KEY",  # You can get a free API key from cohere.ai
+            "Authorization": f"Bearer {COHERE_API_KEY}",
             "Content-Type": "application/json"
         }
         
@@ -161,8 +165,12 @@ def get_cohere_ai_response(mood, journal, sentiment):
 def get_huggingface_ai_response(mood, journal, sentiment):
     """Get AI response using Hugging Face Inference API (FREE)"""
     try:
-        # Hugging Face Inference API - completely free for personal use
-        API_URL = "https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium"
+        # Get Hugging Face API key from environment or use a demo key
+        import os
+        HF_API_KEY = os.environ.get('HF_API_KEY', 'hf_demo')
+        
+        # Use a better model for text generation
+        API_URL = "https://api-inference.huggingface.co/models/microsoft/DialoGPT-large"
         
         # Create a context-aware prompt
         context = f"User is feeling {mood.lower()} and wrote: '{journal}'. Sentiment score: {sentiment:.2f}. "
@@ -186,7 +194,7 @@ def get_huggingface_ai_response(mood, journal, sentiment):
         # Prepare the prompt for the model
         prompt = f"Dr. Mind: I'm here to help. {context} Please provide a warm, empathetic response with practical suggestions."
         
-        headers = {"Authorization": "Bearer hf_demo"}  # Free demo token
+        headers = {"Authorization": f"Bearer {HF_API_KEY}"}
         
         response = requests.post(API_URL, headers=headers, json={"inputs": prompt})
         
